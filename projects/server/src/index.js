@@ -2,6 +2,7 @@ require("dotenv/config");
 const express = require("express");
 const cors = require("cors");
 const { join } = require("path");
+require('dotenv').config({path:join(__dirname,'../.env')});
 
 const PORT = process.env.PORT || 8000;
 const app = express();
@@ -17,9 +18,10 @@ app.use(
 app.use(express.json());
 
 //#region API ROUTES
-
+const boardsRouter = require('./routes/boardsRouter');
 // ===========================
 // NOTE : Add your routes here
+app.use('/api/boards', boardsRouter);
 
 app.get("/api", (req, res) => {
     res.send(`Hello, this is my API`);
