@@ -18,8 +18,19 @@ import { BsThreeDots } from 'react-icons/bs';
 import EditBoard from './EditBoard';
 import DeleteBoard from './DeleteBoard';
 
-function BoardsCard() {
+function BoardsCard({category, id, getAllBoards}) {
+    // console.log("ID from BoardCard :", id);
+    // console.log("Category from BoardCard :", category);
+
     const [isLoaded, setIsLoaded] = useState(false);
+
+    const onEditSuccess = () => {
+        getAllBoards();
+    }
+
+    const onDeleteSuccess = () => {
+        getAllBoards();
+    }
 
     useEffect(() => {
         const delay = setTimeout(() => {
@@ -55,6 +66,7 @@ function BoardsCard() {
                                 <Menu>
                                     <MenuButton
                                         as={'button'}
+                                        
                                     >
                                         <IconButton 
                                             icon={<BsThreeDots/>}
@@ -64,10 +76,19 @@ function BoardsCard() {
                                     </MenuButton>
                                     <MenuList>
                                         <MenuItem>
-                                            <EditBoard/>
+                                            <EditBoard 
+                                                id={id}
+                                                category={category}
+                                                onEditSuccess={onEditSuccess}
+                                            />
                                         </MenuItem>
                                         <MenuItem>
-                                            <DeleteBoard/>
+                                            <DeleteBoard
+                                                key={id}
+                                                id={id}
+                                                category={category}
+                                                onDeleteSuccess={onDeleteSuccess}
+                                            />
                                         </MenuItem>
                                     </MenuList>
                                 </Menu>
@@ -99,7 +120,8 @@ function BoardsCard() {
                         <Text
                             fontSize={'2xl'}
                         >
-                            School myself work
+                            {category}
+                            {/* School myself work */}
                         </Text>
                     </Skeleton>
                 </CardBody>

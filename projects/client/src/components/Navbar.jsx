@@ -35,8 +35,8 @@ function Navbar() {
                     >
                         <Flex>
                             <IconButton
-                                as={FaRegBell}
-                                p={'1.5'}
+                                icon={<FaRegBell size={'20px'}/>}
+                                // p={'1.5'}
                                 size={'sm'}
                                 variant={'none'}
                                 rounded={'2xl'}
@@ -49,7 +49,7 @@ function Navbar() {
                                align={'center'}
                                justify={'center'}
                                ml={'-2'}
-                               mt={'-0.5'}
+                               mt={'-1'}
                             >
                                 <Text
                                     fontSize={'xs'}

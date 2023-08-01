@@ -51,7 +51,7 @@ function Headers() {
 
     return (
         <Box
-            mt={'1rem'}
+            mt={'0.5rem'}
         >
             <Flex
                 flexDir={{base:'column', sm:'row', md:'row', lg:'row'}}
@@ -80,10 +80,11 @@ function Headers() {
             </Flex>
             <Flex
                 flexDir={'column'}
-                my={'1rem'}
+                my={'0.5rem'}
             >
                 <Skeleton
                     isLoaded={isLoaded}
+                    w={{base:'35%',lg:'15%'}}
                 >
                     <Text
                         fontSize={'lg'}

@@ -23,6 +23,7 @@ function Sidebar() {
             px={'4'}
             h={'3000px'}
             bg={backgroundColor}
+            height={'150vh'}
         >
             <Flex
                 flexDir={'column'}

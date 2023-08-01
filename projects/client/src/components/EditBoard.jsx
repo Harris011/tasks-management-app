@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Box,
     Modal,
@@ -13,15 +13,91 @@ import {
     FormControl,
     FormLabel,
     Input,
+    useToast,
 } from '@chakra-ui/react';
+import axios from 'axios';
 
-function EditBoard() {
+function EditBoard({id, category, onEditSuccess}) {
+    console.log('Board ID:', id);
+    console.log('Board Category:', category);
+
     const { isOpen , onOpen, onClose } = useDisclosure();
+    const toast = useToast();
+    const [editCategory, setEditCategory] = useState(category);
+    const [boardId, setBoardId] = useState(id);
+
+    console.log("Data category from editCategory :", editCategory);
+
+    const handleCloseModal = () => {
+        onClose();
+        setEditCategory(category);
+    }
+
+    const onOpenEdit = (id, category) => {
+        onOpen();
+        setBoardId(id);
+        setEditCategory(category);
+    }
+
+    const onBtnEdit = async() => {
+        if (category == '') {
+            return toast({
+                position: 'top',
+                title: 'Edit Board',
+                description: 'Please fill requierd fields',
+                status: 'warning',
+                duration: 2000,
+                isClosable: true
+            })
+        }
+        try {
+            let response = await axios.patch(`http://localhost:8000/api/boards/edit/${id}`,{
+                category: editCategory
+            })
+            if (response.data.success === true) {
+                toast({
+                    position: 'top',
+                    title: 'Edit Board',
+                    description: response.data.message,
+                    status:'success',
+                    duration: 2000,
+                    isClosable: true
+                })
+                handleCloseModal();
+                onEditSuccess();
+            } else {
+                return toast({
+                    position: 'top',
+                    title: 'Edit Board',
+                    description: response.data.message,
+                    status: 'error',
+                    duration: 2000,
+                    isClosable: true
+                })
+            }
+            console.log("Data response from editBoard :", response.data.message);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(() => {
+        setBoardId(id);
+    }, [id]);
+
+    useEffect(() => {
+        setEditCategory(category);
+    }, [category])
 
     return ( 
         <Box>
             <Button
-                onClick={onOpen}
+                onClick={() => {
+                    onOpenEdit(
+                        boardId,
+                        editCategory
+                    )
+                }}
                 variant={'unstyled'}
                 my={'-3'}
             >
@@ -30,7 +106,7 @@ function EditBoard() {
 
             <Modal
                 isOpen={isOpen}
-                onClose={onClose}
+                onClose={handleCloseModal}
                 size={{base:'full', lg:'md'}}
                 motionPreset='scale'
             >
@@ -50,7 +126,9 @@ function EditBoard() {
                                 Title
                             </FormLabel>
                             <Input 
-                                placeholder='Enter Title' 
+                                placeholder='Enter Title'
+                                onChange={(e) => setEditCategory(e.target.value)}
+                                value={editCategory}
                             />
                         </FormControl>
                     </ModalBody>
@@ -59,11 +137,12 @@ function EditBoard() {
                         <Button
                             colorScheme='twitter'
                             mr={'3'}
+                            onClick={onBtnEdit}
                         >
                             Save
                         </Button>
                         <Button
-                            onClick={onClose}
+                            onClick={handleCloseModal}
                         >
                             Cancel
                         </Button>

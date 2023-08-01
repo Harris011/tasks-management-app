@@ -17,8 +17,14 @@ module.exports = (sequelize, DataTypes) => {
     title: DataTypes.STRING,
     date: DataTypes.DATE,
     description: DataTypes.STRING,
-    boards_id: DataTypes.INTEGER,
-    status_id: DataTypes.INTEGER
+    boards_id: {
+      type: DataTypes.INTEGER,
+      defaultValue: 1
+    },
+    status_id: {
+      type: DataTypes.INTEGER,
+      defaultValue: 1
+    }
   }, {
     sequelize,
     modelName: 'tasks',
