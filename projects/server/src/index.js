@@ -20,9 +20,11 @@ app.use(express.json());
 
 //#region API ROUTES
 const boardsRouter = require('./routes/boardsRouter');
+const tasksRouter = require('./routes/tasksRouter')
 // ===========================
 // NOTE : Add your routes here
 app.use('/api/boards', boardsRouter);
+app.use('/api/tasks', tasksRouter);
 
 app.get("/api", (req, res) => {
     res.send(`Hello, this is my API`);

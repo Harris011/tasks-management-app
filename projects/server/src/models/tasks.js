@@ -11,6 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      tasks.belongsTo(models.boards, {foreignKey: 'boards_id'});
+      tasks.belongsTo(models.status, {foreignKey: 'status_id'});
     }
   }
   tasks.init({
@@ -24,6 +26,10 @@ module.exports = (sequelize, DataTypes) => {
     status_id: {
       type: DataTypes.INTEGER,
       defaultValue: 1
+    },
+    isDeleted: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
     }
   }, {
     sequelize,

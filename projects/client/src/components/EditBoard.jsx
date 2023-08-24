@@ -18,15 +18,10 @@ import {
 import axios from 'axios';
 
 function EditBoard({id, category, onEditSuccess}) {
-    console.log('Board ID:', id);
-    console.log('Board Category:', category);
-
     const { isOpen , onOpen, onClose } = useDisclosure();
     const toast = useToast();
     const [editCategory, setEditCategory] = useState(category);
     const [boardId, setBoardId] = useState(id);
-
-    console.log("Data category from editCategory :", editCategory);
 
     const handleCloseModal = () => {
         onClose();
@@ -75,7 +70,6 @@ function EditBoard({id, category, onEditSuccess}) {
                     isClosable: true
                 })
             }
-            console.log("Data response from editBoard :", response.data.message);
         } catch (error) {
             console.log(error);
         }

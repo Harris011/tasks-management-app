@@ -9,11 +9,10 @@ import {
     ModalCloseButton,
     useDisclosure,
     Button,
-    ModalHeader,
-    Text
+    ModalHeader
 } from '@chakra-ui/react';
 
-function TaskDetail() {
+function TaskDetail({description}) {
     const { isOpen , onOpen, onClose } = useDisclosure();
 
     return ( 
@@ -35,17 +34,13 @@ function TaskDetail() {
             >
                 <ModalOverlay/>
                 <ModalContent>
-                    <ModalHeader>Task Title</ModalHeader>
+                    <ModalHeader>Task Detail</ModalHeader>
                     <ModalCloseButton/>
                     <ModalBody
                         pb={'6'}
+                        style={{ whiteSpace: 'pre-wrap' }}
                     >
-                        <Text>
-                            1. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Enim nisi fugiat distinctio neque, beatae iusto omnis minus sapiente praesentium, molestias soluta temporibus sit vel facere veritatis ullam qui rem quisquam?
-                        </Text>
-                        <Text>
-                        2. Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut laborum placeat itaque odit excepturi accusamus laudantium obcaecati provident, dolorem quis, consectetur, praesentium quos reiciendis voluptatem ratione similique aspernatur vero voluptatibus.
-                        </Text>
+                        {description}
                     </ModalBody>
                     <ModalFooter>
                         <Button

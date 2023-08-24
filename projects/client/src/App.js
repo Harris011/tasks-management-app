@@ -1,5 +1,5 @@
 import './App.css';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {Routes, Route} from 'react-router-dom';
 import { Flex, Box } from '@chakra-ui/react';
 import Dashboard from './pages/Dashboard';
@@ -9,7 +9,6 @@ import Headers from './components/Headers';
 import Boards from './pages/Boards';
 import PageNotFound from './pages/PageNotFound';
 import SecondNavbar from './components/SecondNavbar';
-
 
 function App() {
   return (
@@ -33,11 +32,15 @@ function App() {
         <Box
           w={{base:null, sm: '82%', md:'82%', lg: '82%'}}
           px={'4'}
+          h={'100vh'}
         >
           <Headers/>
           <SecondNavbar/>
           <Routes>
-            <Route path='/' element={<Dashboard/>}/>
+            <Route 
+              path='/' 
+              element={<Dashboard/>}
+            />
             <Route path='/boards' element={<Boards/>}/>
             <Route path='*' element={<PageNotFound/>}/>
           </Routes>

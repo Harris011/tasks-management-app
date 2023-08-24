@@ -24,6 +24,9 @@ module.exports = {
       status_id: {
         type: Sequelize.INTEGER
       },
+      isDeleted: {
+        type: Sequelize.BOOLEAN
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

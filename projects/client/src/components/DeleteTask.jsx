@@ -10,11 +10,39 @@ import {
     AlertDialogCloseButton,
     useDisclosure,
     Button,
+    useToast,
 } from '@chakra-ui/react';
+import axios from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
+import { setTasksNotification } from '../Reducers/tasksNotification';
 
-function DeleteTask() {
+function DeleteTask({id, onDeleteSuccess}) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const cancelRef = useRef();
+    const toast = useToast();
+    const dispatch = useDispatch();
+    const tasks = useSelector(state => state.tasksNotification);
+
+    const onBtnDelete = async () => {
+        try {
+            let response = await axios.patch(`http://localhost:8000/api/tasks/delete/${id}`)
+            if (response.data.success == true) {
+                toast({
+                    position:'top',
+                    title: 'Delete Task',
+                    description: response.data.message,
+                    status: 'success',
+                    duration: 2000,
+                    isClosable: true
+                })
+                const updatedTasks = tasks.filter(task => task.id !== id);
+                dispatch(setTasksNotification(updatedTasks));
+                onDeleteSuccess();
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
     
     return ( 
         <Box>
@@ -51,7 +79,10 @@ function DeleteTask() {
                             </Button>
                             <Button
                                 colorScheme='red'
-                                onClick={onClose}
+                                onClick={() => {
+                                    onBtnDelete();
+                                    onClose();
+                                }}
                                 ml={'3'}
                             >
                                 Delete

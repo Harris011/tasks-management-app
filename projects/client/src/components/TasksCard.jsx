@@ -13,15 +13,79 @@ import {
     MenuButton,
     MenuList,
     MenuItem,
+    useToast,
 } from '@chakra-ui/react';
-import { CheckIcon } from '@chakra-ui/icons';
+import { CheckIcon, CloseIcon } from '@chakra-ui/icons';
 import { BsThreeDots } from 'react-icons/bs';
 import EditTask from './EditTask';
 import DeleteTask from './DeleteTask';
 import TaskDetail from './TaskDetail';
+import axios from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
+import { setTasksNotification } from '../Reducers/tasksNotification';
 
-function TasksCard() {
+function TasksCard({id, title, date, description, boardId, boardCategory, status, getAllTasks}) {
     const [isLoaded, setIsLoaded] = useState(false);
+    const toast = useToast();
+    const dispatch = useDispatch();
+    const tasks = useSelector(state => state.tasksNotification);
+    const sortby = 'date';
+    const order = 'ASC';
+
+    let getIncomingTasks = async () => {
+        try {
+            let response = await axios.get(`http://localhost:8000/api/tasks/notification?sortby=${sortby}&order=${order}`);
+            if (response.data.data && response.data.data.length > 0) {
+                dispatch(setTasksNotification(response.data.data));
+            } else {
+                dispatch(setTasksNotification([]));
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(() => {
+        getIncomingTasks();
+    }, [sortby, order]);
+
+    const onBtnUpdate = async () => {
+        try {
+            let response = await axios.patch(`http://localhost:8000/api/tasks/update/${id}`);
+            if (response.data.success === true) {
+                toast({
+                    position:'top',
+                    title: 'Update Task',
+                    description: response.data.message,
+                    status: 'success',
+                    duration: 2000,
+                    isClosable: true
+                })
+            } else {
+                toast({
+                    position:'top',
+                    title: 'Update Task',
+                    description: response.data.message,
+                    status: 'success',
+                    duration: 2000,
+                    isClosable: true
+                })
+            }
+            getAllTasks();
+            getIncomingTasks();
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const onEditSuccess = () => {
+        getAllTasks();
+        getIncomingTasks();
+    }
+
+    const onDeleteSuccess = () => {
+        getAllTasks();
+    }
 
     useEffect(() => {
         const delay = setTimeout(() => {
@@ -36,7 +100,7 @@ function TasksCard() {
     return ( 
         <Box>
             <Card
-                maxW={'xs'}
+                minW={{base:'327px', lg: '312px'}}
             >
                 <CardHeader
                     mb={'-9'}
@@ -65,10 +129,23 @@ function TasksCard() {
                                     </MenuButton>
                                     <MenuList>
                                         <MenuItem>
-                                            <EditTask/>
+                                            <EditTask
+                                                id={id}
+                                                title={title}
+                                                date={date}
+                                                description={description}
+                                                boardId={boardId}
+                                                boardCategory={boardCategory}
+                                                onEditSuccess={onEditSuccess}
+                                                getIncomingTasks={getIncomingTasks}
+                                            />
                                         </MenuItem>
                                         <MenuItem>
-                                            <DeleteTask/>
+                                            <DeleteTask
+                                                key={id}
+                                                id={id}
+                                                onDeleteSuccess={onDeleteSuccess}
+                                            />
                                         </MenuItem>
                                     </MenuList>
                                 </Menu>
@@ -76,11 +153,21 @@ function TasksCard() {
                             <SkeletonCircle
                                 isLoaded={isLoaded}
                             >
-                                <IconButton 
+                                {status === 'active' ? (
+                                    <IconButton 
                                     icon={<CheckIcon/>} 
                                     rounded={'full'}
                                     size={'sm'}
-                                />
+                                    onClick={onBtnUpdate}
+                                />    
+                                ) : (
+                                    <IconButton 
+                                        icon={<CloseIcon/>} 
+                                        rounded={'full'}
+                                        size={'sm'}
+                                        onClick={onBtnUpdate}
+                                    />
+                                ) }
                             </SkeletonCircle>
                         </Flex>
                         <Flex
@@ -94,7 +181,7 @@ function TasksCard() {
                                     letterSpacing={'tight'}
                                     fontSize={'md'}
                                 >
-                                    Myself 
+                                    {boardCategory}
                                 </Text>
                             </Skeleton>
                             <Skeleton
@@ -106,7 +193,7 @@ function TasksCard() {
                                     fontSize={'xs'}
                                     color={'gray.500'}
                                 >
-                                    Friday, 14 July 2023
+                                    {date}
                                 </Text>
                             </Skeleton>
                         </Flex>
@@ -121,7 +208,7 @@ function TasksCard() {
                         <Text
                             fontSize={'lg'}
                         >
-                            Visit the museum and go to park go to market, go to press
+                            {title}
                         </Text>
                     </Skeleton>
                     <Flex
@@ -131,7 +218,9 @@ function TasksCard() {
                         <Skeleton
                             isLoaded={isLoaded}
                         >
-                            <TaskDetail/>
+                            <TaskDetail 
+                                description={description}
+                            />
                         </Skeleton>
                     </Flex>
                 </CardBody>

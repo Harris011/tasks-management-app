@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import {
     Box,
     AlertDialog,
@@ -18,8 +18,6 @@ function DeleteBoard({id, onDeleteSuccess}) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const cancelRef = useRef();
     const toast = useToast();
-
-    // const [boardId, setBoardId] = useState(id);
 
     const onBtnDelete = async () => {
         try {

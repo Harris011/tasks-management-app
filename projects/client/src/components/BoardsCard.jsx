@@ -18,10 +18,7 @@ import { BsThreeDots } from 'react-icons/bs';
 import EditBoard from './EditBoard';
 import DeleteBoard from './DeleteBoard';
 
-function BoardsCard({category, id, getAllBoards}) {
-    // console.log("ID from BoardCard :", id);
-    // console.log("Category from BoardCard :", category);
-
+function BoardsCard({category, id, tasks, getAllBoards}) {
     const [isLoaded, setIsLoaded] = useState(false);
 
     const onEditSuccess = () => {
@@ -46,11 +43,11 @@ function BoardsCard({category, id, getAllBoards}) {
         <Box>
             <Card
                 shadow={'md'}
-                minW={{base:'300px'}}
+                minW={{base:'308px'}}
             >
                 <CardHeader
-                    mb={'-4'}
-                    mt={'-2'}
+                    mb={{base:'-5', lg:'-4'}}
+                    mt={{base:'-2.5', lg:'-2'}}
                 >
                     <Flex
                         flexDir={'column'}
@@ -104,8 +101,9 @@ function BoardsCard({category, id, getAllBoards}) {
                             >
                                 <Text
                                     letterSpacing={'tight'}
+                                    fontSize={'md'}
                                 >
-                                    3 Active Tasks
+                                    {tasks.length} Active Tasks
                                 </Text>
                             </Skeleton>
                         </Flex>
@@ -118,10 +116,9 @@ function BoardsCard({category, id, getAllBoards}) {
                         isLoaded={isLoaded}
                     >
                         <Text
-                            fontSize={'2xl'}
+                            fontSize={'xl'}
                         >
                             {category}
-                            {/* School myself work */}
                         </Text>
                     </Skeleton>
                 </CardBody>
