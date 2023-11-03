@@ -78,7 +78,6 @@ module.exports = {
                 limit: parseInt(size),
                 totalPages: Math.ceil(getTasks.count/size),
                 data: getTasks.rows
-                // data: formatedData
             })
         } catch (error) {
             console.log(error);
