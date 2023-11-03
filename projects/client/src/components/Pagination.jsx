@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
     Flex,
     IconButton,
@@ -11,6 +11,10 @@ import { FaChevronCircleLeft, FaChevronCircleRight} from 'react-icons/fa';
 function Pagination(props) {
     const backgroundColor = useColorModeValue('teal.300', 'teal.700');
     const [pageNumber, setPageNumber] = useState(1);
+
+    useEffect(() => {
+        setPageNumber(props.page + 1);
+    }, [props.page]);
 
     const buttonNext = () => {
         const maxPageNumber = Math.ceil(props.totalData / props.size);
@@ -54,11 +58,8 @@ function Pagination(props) {
             />
             {/* THE PAGE NUMBER*/}
             <Text
-                // background={'white'}
-                // bgGradient='linear(to-b, green.500, green.400)'
                 py={'0.5'}
                 px={'3'}
-                // color={'white'}
                 rounded={'lg'}
                 fontSize={'md'}
                 border={'1px'}

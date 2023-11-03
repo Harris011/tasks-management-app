@@ -10,68 +10,59 @@ module.exports = {
                 sortby,
                 order,
                 category
-            } = req.query
-
-            if(!page){
-                page = 0;
-            }
-            if(!size){
-                size = 6;
-            }
-            if(!sortby){
-                sortby = 'id'
-            }
-            if(!order) {
-                order = 'ASC'
-            }
-            if (!category){
-                category=''
-            }
-
-            let offset = parseInt(page*size)
-            if(category){
-                offset = 0;
-            }
-
+            } = req.query;
+    
+            page = page || 0;
+            size = size || 6;
+            sortby = sortby || 'id';
+            order = order || 'ASC';
+            category = category || '';
+    
+            let offset = parseInt(page) * parseInt(size);
+    
             const dataSortby = () => {
                 if (sortby === 'category') {
-                    return ['category', order]
-                } else if (sortby === 'id') {
-                    return ['id', order]
+                    return ['category', order];
                 } else {
-                    return ['id', order]
+                    return ['id', order];
                 }
-            }
-
-            let getBoards = await model.boards.findAndCountAll({
+            };
+    
+            const getBoards = await model.boards.findAndCountAll({
                 attributes: ['id', 'category', 'isDeleted'],
                 where: {
-                    category: {[sequelize.Op.like]: `%${category}%`},
-                    isDeleted:{[sequelize.Op.eq]:false},
+                    category: { [sequelize.Op.like]: `%${category}%` },
+                    isDeleted: { [sequelize.Op.eq]: false },
                 },
                 include: [
                     {
                         model: model.tasks,
-                        attributes: ['title']
-                    }
+                        attributes: ['title', 'status_id'],
+                        required: false,
+                        where: {
+                            status_id: 1,
+                            isDeleted: false,
+                        },
+                        include: [
+                            {
+                                model: model.status,
+                                attributes: ['status'],
+                            },
+                        ],
+                    },
                 ],
                 order: [dataSortby()],
                 offset: offset,
-                limit: parseInt(size)
-            })
-            
-            // console.log('Data from get Board :', getBoards.rows);
-            // getBoards.rows.forEach(board => {
-            //     console.log(`id: ${board.id}, category: ${board.category}, isDeleted: ${board.isDeleted}`);
-            // });
-
+                limit: parseInt(size),
+            });
+    
             return res.status(200).send({
                 success: true,
                 datanum: getBoards.count,
                 limit: parseInt(size),
-                totalPages: Math.ceil(getBoards.count/size),
-                data: getBoards.rows
-            })
+                totalPages: Math.ceil(getBoards.count / size),
+                data: getBoards.rows,
+            });
         } catch (error) {
             console.log(error);
             next(error);
@@ -81,8 +72,7 @@ module.exports = {
         try {
             let checkBoard = await model.boards.findAll({
                 where: {category: req.body.category}
-            })
-            console.log('Data from create :', checkBoard);
+            });
 
             if(checkBoard.length == 0) {
                 const {category} = req.body
@@ -118,8 +108,7 @@ module.exports = {
                     category,
                     id: {[sequelize.Op.ne]: boardId}
                 }
-            })
-            console.log("Data from Edit", checkBoard);
+            });
 
             if (checkBoard.length == 0) {
                 const currentBoard = await model.boards.findByPk(boardId);
@@ -131,7 +120,6 @@ module.exports = {
                             id: boardId
                         }}
                     )
-                    console.log("Data from edit :", editBoard);
     
                     res.status(200).send({
                         success: true,
@@ -163,9 +151,7 @@ module.exports = {
                 where: {
                     id: req.params.id
                 }
-            })
-            console.log('Data from deleteBoard :', checkBoard);
-            // console.log('Data from deleteBoard value isDeleted :' , checkBoard[0].dataValues.isDeleted);
+            });
 
             if (checkBoard[0].dataValues.isDeleted == false) {
                 await model.boards.update({isDeleted: 1}, {
@@ -173,7 +159,6 @@ module.exports = {
                         id: req.params.id
                     }
                 })
-                // console.log('data update after delete :', deleteBoard);
                 res.status(200).send({
                     success: true,
                     message: "This Board is now disable",

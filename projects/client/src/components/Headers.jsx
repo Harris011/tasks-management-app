@@ -5,6 +5,7 @@ import {
     Flex,
     Skeleton
 } from '@chakra-ui/react';
+import Notification from './Notification';
 
 function Headers() {
     const [greeting, setGreeting] = useState('');
@@ -50,9 +51,7 @@ function Headers() {
       }, []);
 
     return (
-        <Box
-            mt={'0.5rem'}
-        >
+        <Box>
             <Flex
                 flexDir={{base:'column', sm:'row', md:'row', lg:'row'}}
                 gap={'2'}
@@ -77,10 +76,20 @@ function Headers() {
                         {greeting}
                     </Text>
                 </Skeleton>
+                <Skeleton
+                    isLoaded={isLoaded}
+                    className="desktop"
+                    mt={'3'}
+                    ml={'1.5'}
+                >
+                    <Box>
+                        <Notification/>
+                    </Box>
+                </Skeleton>
             </Flex>
             <Flex
                 flexDir={'column'}
-                my={'0.5rem'}
+                mt={'0.5'}
             >
                 <Skeleton
                     isLoaded={isLoaded}

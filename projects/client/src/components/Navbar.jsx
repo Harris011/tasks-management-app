@@ -2,15 +2,15 @@ import React from 'react';
 import {
     Box,
     Flex,
-    IconButton,
     Text,
     useColorModeValue
 } from '@chakra-ui/react';
-import { FaRegBell } from 'react-icons/fa';
 import ToggleColorMode from './ToggleColorMode';
+import Notification from './Notification';
 
 function Navbar() {
-    const backgroundColor = useColorModeValue('gray.300', 'gray.700');
+    const backgroundColor = useColorModeValue('teal.300', 'teal.700');
+
     return ( 
         <Box
             bg={backgroundColor}
@@ -31,33 +31,12 @@ function Navbar() {
                 <Flex>
                     <Flex
                         alignItems={'center'}
-                        gap={'5'}
+                        gap={'3'}
                     >
-                        <Flex>
-                            <IconButton
-                                icon={<FaRegBell size={'20px'}/>}
-                                // p={'1.5'}
-                                size={'sm'}
-                                variant={'none'}
-                                rounded={'2xl'}
-                            />
-                            <Flex
-                               bg={'red.500'}
-                               borderRadius={'50%'}
-                               w={'6'}
-                               h={'6'}
-                               align={'center'}
-                               justify={'center'}
-                               ml={'-2'}
-                               mt={'-1'}
-                            >
-                                <Text
-                                    fontSize={'xs'}
-                                    color={'white'}
-                                >
-                                    3
-                                </Text>
-                            </Flex>
+                        <Flex
+                            mr={'2'}
+                        >
+                            <Notification/>
                         </Flex>
                         <Flex>
                             <ToggleColorMode/>
