@@ -1,5 +1,10 @@
 import logo from './logo.svg';
 import './App.css';
+import { 
+  Icon, 
+  Text
+} from '@chakra-ui/react';
+import { WarningTwoIcon } from '@chakra-ui/icons';
 
 function App() {
   return (
@@ -18,6 +23,9 @@ function App() {
           Learn React
         </a>
       </header>
+      {/* <Text fontSize={'5xl'}>
+        This is a test of the Chakra UI library
+      </Text> */}
     </div>
   );
 }
