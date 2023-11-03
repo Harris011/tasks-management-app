@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import {
     Box,
     AlertDialog,
@@ -10,11 +10,35 @@ import {
     AlertDialogCloseButton,
     useDisclosure,
     Button,
+    useToast,
 } from '@chakra-ui/react';
+import axios from 'axios';
 
-function DeleteBoard() {
+function DeleteBoard({id, onDeleteSuccess}) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const cancelRef = useRef();
+    const toast = useToast();
+
+    // const [boardId, setBoardId] = useState(id);
+
+    const onBtnDelete = async () => {
+        try {
+            let response = await axios.patch(`http://localhost:8000/api/boards/delete/${id}`)
+            if (response.data.success === true) {
+                toast({
+                    position: 'top',
+                    title: 'Delete Board',
+                    description: response.data.message,
+                    status: 'success',
+                    duration: 2000,
+                    isClosable: true
+                });
+                onDeleteSuccess();
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return ( 
         <Box>
@@ -51,7 +75,10 @@ function DeleteBoard() {
                             </Button>
                             <Button
                                 colorScheme='red'
-                                onClick={onClose}
+                                onClick={() => {
+                                    onBtnDelete();
+                                    onClose();
+                                }}
                                 ml={'3'}
                             >
                                 Delete

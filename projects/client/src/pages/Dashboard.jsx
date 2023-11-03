@@ -24,10 +24,13 @@ function Dashboard() {
         <Box
             my={'6'}
             mx={{base:'3', sm:'3', md:'0', lg:'0'}}
+            // h={'100vh'}
+            // overflowY={'hidden'}
         >
             <Flex
                 flexDir={'column'}
-                gap={'4'}
+                gap={'2'}
+                // h={'100%'}
             >
                 <Flex>
                     <Skeleton
@@ -40,7 +43,6 @@ function Dashboard() {
                     gap={'4'}
                     flexWrap={'wrap'}
                 >
-                    <TasksCard/>
                     <TasksCard/>
                     <TasksCard/>
                     <TasksCard/>

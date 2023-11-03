@@ -10,12 +10,15 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      boards.hasMany(models.tasks, {foreignKey: 'boards_id'});
     }
   }
   boards.init({
     category: DataTypes.STRING,
-    isDeleted: DataTypes.BOOLEAN
+    isDeleted: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    }
   }, {
     sequelize,
     modelName: 'boards',
