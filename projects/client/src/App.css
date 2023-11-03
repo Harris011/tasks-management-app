@@ -1,8 +1,13 @@
 .App {
-  text-align: center;
+  /* text-align: center; */
+  /* background-color: skyblue; */
+  /* height: 100vh; */
+  /* width: 100vw; */
+  padding: 0;
+  margin: 0;
 }
 
-.App-logo {
+/* .App-logo {
   height: 40vmin;
   pointer-events: none;
 }
@@ -22,9 +27,9 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
-}
+} */
 
-.App-link {
+/* .App-link {
   color: #61dafb;
 }
 
@@ -34,5 +39,31 @@
   }
   to {
     transform: rotate(360deg);
+  }
+} */
+
+.mobile {
+  display: none;
+}
+
+.desktop {
+  display: block;
+}
+
+@media only screen and (max-device-width: 480px) {
+  .mobile {
+    display: block;
+  }
+  .desktop {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 481px) {
+  .mobile {
+    display: block;
+  }
+  .desktop {
+    display: none;
   }
 }
